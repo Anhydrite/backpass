@@ -91,6 +91,14 @@ export function prepareHarnessInvocation({ agent, model = null, effort = null, w
         setEffortKey: requestedEffort ? SESSION_LOCAL_EFFORT_KEYS[agent] : null,
         requiredBuiltinAgent: overlay ? agent : null,
       };
+    } else if (agent === "maki") {
+      // Maki's ACP server selects the model itself: acpx `--model` is the only lever and
+      // there is no per-session effort key. `resolvedEffort` never asks for an effort
+      // here, so only a pinned model reaches this branch.
+      invocation = { ...baseInvocation({ notes, dispose }), acpxModel: requestedModel };
+      if (requestedEffort) {
+        notes.push(`maki resolves its thinking level from its own config; effort=${requestedEffort} is not forwarded`);
+      }
     } else if (overlay) {
       throw new UserError(
         `${agent} has no proven invocation-scoped way to apply ${describeOverride(requestedModel, requestedEffort)} without writing persistent harness defaults`,

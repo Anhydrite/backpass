@@ -8,7 +8,7 @@ import { normalizeSkillsDir } from "./skills.js";
 export const CONFIG_FILENAME = ".backpassrc.json";
 export const STATE_DIRNAME = ".backpass";
 
-export const ALL_HARNESSES = ["claude", "codex", "pi", "opencode", "grok", "cursor", "hermes"];
+export const ALL_HARNESSES = ["claude", "codex", "pi", "opencode", "grok", "cursor", "hermes", "maki"];
 /** Cursor IDE is deferred to v1.1 and only ever runs behind --include-cursor-ide. */
 export const OPT_IN_HARNESSES = ["cursor-ide"];
 
@@ -85,8 +85,9 @@ export const DEFAULT_CONFIG = {
   seed: null,
   /**
    * `agent: null` means auto-pick from `ladders[role]`; `effort: null` means
-   * `DEFAULT_EFFORT[role]`, except OpenCode which omits the overlay until effort
-   * is set. Setting `agent` pins the role and skips the ladder.
+   * `DEFAULT_EFFORT[role]`, except OpenCode and Maki, which resolve the model and
+   * thinking level themselves and take no effort overlay. Setting `agent` pins the
+   * role and skips the ladder.
    */
   analysis: { agent: null, model: null, effort: null },
   synthesis: { agent: null, model: null, effort: null },

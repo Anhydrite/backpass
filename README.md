@@ -31,7 +31,7 @@ It finds the agent sessions that actually ran in your repo, reads
 what happened in them, and proposes evidence-backed edits to your memory surface - the
 memory file and project skills - under a token budget, gated by you.
 
-- **Local-first** - Reads the transcript stores of seven agent harnesses directly from disk,
+- **Local-first** - Reads the transcript stores of eight agent harnesses directly from disk,
   locally or over SSH to your own machines. No API, no upload; transcripts never leave your
   machines except into an agent you already authenticated, and obvious secrets are redacted
   before they do.
@@ -220,7 +220,7 @@ It cannot be combined with
 
 ### 1. Collect samples - which sessions belong to this repo
 
-backpass reads the local transcript stores of seven harnesses directly. No API, no upload.
+backpass reads the local transcript stores of eight harnesses directly. No API, no upload.
 
 | Harness        | Store                                           | Repo tie                                            |
 | -------------- | ----------------------------------------------- | --------------------------------------------------- |
@@ -231,6 +231,7 @@ backpass reads the local transcript stores of seven harnesses directly. No API, 
 | **grok**       | `~/.grok/sessions/<encoded-cwd>/<uuid>/`        | `summary.json` `cwd` + `git_remotes`                |
 | **cursor CLI** | `~/.cursor/chats/<md5(cwd)>/<uuid>/`            | `meta.json` `cwd`                                   |
 | **hermes**     | `~/.hermes/state.db` (sqlite)                   | session cwd, with CLI prompt / ACP config fallbacks |
+| **maki**       | `~/.local/state/maki/sessions/<id>.jsonl`       | session-header `cwd`                                |
 
 Claude collection covers `$CLAUDE_CONFIG_DIR/projects` alongside the default store, so a
 relocated config dir does not hide its sessions. The variable is read from backpass's own
@@ -242,6 +243,11 @@ sessions under `~/.bb/pi-bridge-sessions/`. It also honors `PI_CODING_AGENT_DIR`
 `PI_CODING_AGENT_SESSION_DIR`, `BB_DATA_DIR`, and `BB_PI_BRIDGE_SESSION_DIR` when they are
 set in backpass's environment. When roots overlap, backpass scans every applicable layout
 and reads each JSONL file once.
+
+Maki collection covers the live sessions under `~/.local/state/maki/sessions/` and the
+compaction archives under `sessions/archive/<id>/`; `XDG_STATE_HOME` relocates the root
+and `MAKI_STATE_DIR` points backpass at a relocated state directory. A live session
+always wins over its archived copy, so one session is never counted twice.
 
 OMP (Oh My Pi) collection is **off by default**. Set `discovery.includeOmp` to `true` in
 `.backpassrc.json` or your [personal config](#configuration) to also read
@@ -854,6 +860,19 @@ overrides are scoped to that Backpass invocation, so they never rewrite your har
 defaults. If an adapter has no proven overlay, backpass stops rather than pretending it
 applied.
 
+Harnesses outside the default ladder work the same way once acpx knows them: register the
+adapter command in `~/.acpx/config.json`, then pin it. Maki ships its own ACP server, so
+it needs no model or effort overlay - it resolves both from its own config, exactly like
+OpenCode (`--model` is still forwarded when you pin one):
+
+```json
+{ "agents": { "maki": { "argv": ["maki", "acp"] } } }
+```
+
+```sh
+backpass --analysis-agent maki --synthesis-agent maki
+```
+
 ### Configuration
 
 `.backpassrc.json` in the repo root, layered over `~/.config/backpass/config.json`, with
@@ -888,7 +907,7 @@ CLI flags on top:
     ]
   },
   "discovery": {
-    "harnesses": ["claude", "codex", "pi", "opencode", "grok", "cursor", "hermes"],
+    "harnesses": ["claude", "codex", "pi", "opencode", "grok", "cursor", "hermes", "maki"],
     "since": "30d",
     "worktreeGlobs": [],
     "cloneRoots": [],

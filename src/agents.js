@@ -534,7 +534,7 @@ export class AgentResolver {
 export function resolvedEffort(role, agent, config) {
   const configured = config[role].effort;
   if (typeof configured === "string" && configured.trim()) return configured.trim();
-  if (agent === "opencode") return null;
+  if (agent === "opencode" || agent === "maki") return null;
   return DEFAULT_EFFORT[role];
 }
 

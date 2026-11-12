@@ -6,6 +6,7 @@ import * as pi from "./adapters/pi.js";
 import * as grok from "./adapters/grok.js";
 import * as opencode from "./adapters/opencode.js";
 import * as hermes from "./adapters/hermes.js";
+import * as maki from "./adapters/maki.js";
 import * as cursorCli from "./adapters/cursor-cli.js";
 import * as cursorIde from "./adapters/cursor-ide.js";
 
@@ -27,6 +28,7 @@ export const ADAPTERS = Object.assign(Object.create(null), {
   grok,
   opencode,
   hermes,
+  maki,
   cursor: cursorCli,
   "cursor-ide": cursorIde,
 });

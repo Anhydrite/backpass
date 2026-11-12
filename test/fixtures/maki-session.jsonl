@@ -1,0 +1,10 @@
+{"t":"header","v":3,"id":"maki-1234","model":"ocgo/deepseek-v4.1-flash","cwd":"/repo/demo","created_at":1785667200}
+{"t":"msg","d":{"role":"user","content":[{"type":"text","text":"Add the changelog entry."}]}}
+{"t":"msg","d":{"role":"assistant","content":[{"type":"thinking","thinking":"internal reasoning that must be dropped"},{"type":"text","text":"Editing CHANGELOG.md."},{"type":"tool_use","id":"tc1","name":"bash","input":{"command":"git status"}}]}}
+{"t":"out","id":"tc1","d":{"Plain":{"text":"nothing to commit"}}}
+{"t":"msg","d":{"role":"user","content":[{"type":"tool_result","tool_use_id":"tc1","content":"nothing to commit"}]}}
+{"t":"msg","d":{"role":"user","content":[{"type":"image","source":{"type":"base64","media_type":"image/png","data":"AAAA"}}]}}
+{"t":"sub_msg","sub":"tc9","d":{"role":"user","content":[{"type":"text","text":"subagent prompt that must not leak"}]}}
+{"t":"frame","d":{"system":"full system prompt snapshot"}}
+{"t":"meta","title":"Add the changelog entry","updated_at":1785667300,"token_usage":{"input_tokens":10,"output_tokens":5}}
+{"t":"msg","d":{"role":"assistant","content":[{"type":"text","text":"Done."}]}}
